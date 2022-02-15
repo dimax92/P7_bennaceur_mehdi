@@ -1,0 +1,13 @@
+.formulaireInscription{
+    display: grid;
+    margin: 20px;
+    height: 10rem;
+    width: 18rem;
+    input {
+        border-radius: 5px;
+    }
+    button{
+        border-radius: 5px;
+        cursor: pointer;
+    }
+}

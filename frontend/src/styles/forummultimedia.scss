@@ -1,0 +1,48 @@
+.videoLigne{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .pVideo{
+        font-weight: bold;
+        font-size: 120%;
+    }
+    .formulaireVideo{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .labelVideo{
+            cursor: pointer;
+            text-decoration: underline;
+            text-align: center;
+            font-weight: bold;
+        }
+        #video{
+            display: none;
+        }
+        .buttonVideo{
+            height: 30px;
+            width: 200px;
+            border-radius: 10px;
+            border: solid 0.2px;
+            margin: 20px;
+            font-weight: bold;
+        }
+    }
+}
+.divVideo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    .divVideo1{
+        display: flex;
+        flex-direction: column;
+        .video{
+            margin:10px;
+        }
+        button{
+            color: white;
+            background: red;
+        }
+    }
+}

@@ -1,0 +1,14 @@
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    .navigation{
+        margin:10px;
+        text-decoration: none;
+        color:black;
+        font-weight:bold;
+    }
+    .nav-active{
+        color:blue;
+    }
+}
