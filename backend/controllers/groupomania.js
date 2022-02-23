@@ -40,7 +40,7 @@ exports.inscription = (req, res, next) => {
 
   exports.profil = (req, res, next) => {
     let resultat="";
-    connection.query("SELECT * FROM inscription WHERE nom = ? AND email = ?",[req.body.nom, req.body.email], function (error, results, fields) {
+    connection.query("SELECT * FROM inscription WHERE email = ?",[req.body.email], function (error, results, fields) {
       if (error) throw error;
       resultat=results;
       if(resultat.length===1){
@@ -109,9 +109,21 @@ exports.modifierMotdepasse = (req, res, next) => {
   };
 
   exports.supprimerCompte = (req, res, next)=>{
-    connection.query("DELETE FROM inscription WHERE id=?",[req.body.utilisateur],(error, results, flelds)=>{
-      console.log(req.body);
-      res.status(200).json({message: "tout est ok"});
+    connection.query("DELETE FROM commentaires WHERE utilisateur=?",[req.body.utilisateur],(error, results, flelds)=>{
+      connection.query("SELECT id FROM forum WHERE utilisateur=?",[req.body.utilisateur],(error, results, flelds)=>{
+        for(i=0; i<=results.length-1; i++){
+          connection.query("DELETE FROM commentaires WHERE idproduit=?",[results[i].id]
+          );
+        };
+        connection.query("DELETE FROM forum WHERE utilisateur=?",[req.body.utilisateur],(error, results, flelds)=>{
+          connection.query("DELETE FROM inscription WHERE id=?",[req.body.utilisateur],(error, results, flelds)=>{
+            res.status(200).json({message: "tout est ok"});
+          }
+          );
+        }
+        );
+      }
+      );
     }
     );
   };
@@ -126,12 +138,13 @@ exports.modifierMotdepasse = (req, res, next) => {
   };
 
   exports.insertionTexte = (req, res, next) => {
-    connection.query("INSERT INTO forum (utilisateur, contenu, type) VALUES (?,?,?)",[req.body.utilisateur, req.body.texte, "texte"]
-    );
+    connection.query("SELECT nom FROM inscription WHERE id = ?",[req.body.utilisateur], function (error, results, fields) {
+      connection.query("INSERT INTO forum (utilisateur, contenu, type, date, nom) VALUES (?,?,?,?,?)",[req.body.utilisateur, req.body.texte, "texte", req.body.date, results[0].nom]
+      );
+    });
     connection.query("UPDATE inscription SET derniereparticipation=? WHERE id=?",[req.body.date, req.body.utilisateur]
       );
     res.status(200).json({message: "tout est ok"});
-    console.log(req.headers);
   };
 
   exports.extractionTexte = (req, res, next) => {
@@ -144,30 +157,29 @@ exports.modifierMotdepasse = (req, res, next) => {
   };
 
   exports.suppressionTexte = (req, res, next)=>{
-    connection.query("DELETE FROM forum WHERE utilisateur=? AND contenu=?", [req.body.utilisateur, req.body.textesupprime], function (error, results, fields) {
-      if (error) throw error;
-      if(results.affectedRows===1){
-        res.status(200).json({message: "texte supprimer"});
-      }else{
-        res.status(400).json({message: "texte non supprimer"});
-      };
-    });
+    connection.query("DELETE FROM commentaires WHERE idproduit=?",[req.body.id],(error, results, fields)=>{
+      connection.query("DELETE FROM forum WHERE id=?", [req.body.id], function (error, results, fields) {
+        if (error) throw error;
+        if(results.affectedRows===1){
+          res.status(200).json({message: "texte supprimer"});
+        }else{
+          res.status(400).json({message: "texte non supprimer"});
+        };
+      });
+    }
+    );
   };
 
   exports.insertionVideo = (req, res, next) => {
-    connection.query("INSERT INTO forum (utilisateur, contenu, type) VALUES (?, ?, ?)",[req.query.utilisateur, req.file.filename, "image"],
-    function (error, results, fields){
-      console.log(error)
-    }
-    );
-    console.log(req.query);
+    connection.query("SELECT nom FROM inscription WHERE id = ?",[req.query.utilisateur], function (error, results, fields) {
+      connection.query("INSERT INTO forum (utilisateur, contenu, type, date, nom) VALUES (?, ?, ?, ?, ?)",[req.query.utilisateur, req.file.filename, "image", req.query.date, results[0].nom]);
+    });
     res.status(200).json({message: "tout est ok"});
   };
 
   exports.derniereParticipation = (req, res, next)=>{
     connection.query("UPDATE inscription SET derniereparticipation=? WHERE id=?",[req.body.date, req.body.utilisateur]
       );
-    console.log(req.body);
     res.status(200).json({message: "tout est ok"});
   };
 
@@ -181,21 +193,22 @@ exports.modifierMotdepasse = (req, res, next) => {
   };
 
   exports.suppressionVideo = (req, res, next)=>{
-    connection.query("DELETE FROM forum WHERE utilisateur=? AND contenu=?", [req.query.utilisateur, req.body.liensqlvideo], function (error, results, fields) {
-      if (error) throw error;
-      if(results.affectedRows===1){
-        fs.unlink(req.body.videosupprime, (err) => {
-          if (err) throw err;
-          res.status(200).json({message: "video supprimer"});
-        });
-      }else{
-        res.status(400).json({message: "video non supprimer"});
-      };
+    connection.query("DELETE FROM commentaires WHERE idproduit=?",[req.body.id],(error, results, fields)=>{
+      connection.query("DELETE FROM forum WHERE id=?", [req.body.id], function (error, results, fields) {
+        if (error) throw error;
+        if(results.affectedRows===1){
+          fs.unlink(req.body.videosupprime, (err) => {
+            if (err) throw err;
+            res.status(200).json({message: "video supprimer"});
+          });
+        }else{
+          res.status(400).json({message: "video non supprimer"});
+        };
+      });
     });
   };
 
   exports.loginCharge = (req, res, next) => {
-    console.log(req.body);
     if(req.body.motdepasse==="aaaa"){
       res.status(200).json({
         userId: req.body.userId,
@@ -211,28 +224,32 @@ exports.modifierMotdepasse = (req, res, next) => {
   };
 
   exports.suppressionTexteCharge = (req, res, next)=>{
-    console.log(req.body);
-    connection.query("DELETE FROM forum WHERE contenu=?", [req.body.textesupprime], function (error, results, fields) {
-      if (error) throw error;
-      if(results.affectedRows===1){
-        res.status(200).json({message: "texte supprimer"});
-      }else{
-        res.status(400).json({message: "texte non supprimer"});
-      };
-    });
+    connection.query("DELETE FROM commentaires WHERE idproduit=?",[req.body.id],(error, results, fields)=>{
+      connection.query("DELETE FROM forum WHERE id=?", [req.body.id], function (error, results, fields) {
+        if (error) throw error;
+        if(results.affectedRows===1){
+          res.status(200).json({message: "texte supprimer"});
+        }else{
+          res.status(400).json({message: "texte non supprimer"});
+        };
+      });
+    }
+    );
   };
 
   exports.suppressionVideoCharge = (req, res, next)=>{
-    connection.query("DELETE FROM forum WHERE contenu=?", [req.body.liensqlvideo], function (error, results, fields) {
-      if (error) throw error;
-      if(results.affectedRows===1){
-        fs.unlink(req.body.videosupprime, (err) => {
-          if (err) throw err;
-          res.status(200).json({message: "video supprimer"});
-        });
-      }else{
-        res.status(400).json({message: "video non supprimer"});
-      };
+    connection.query("DELETE FROM commentaires WHERE idproduit=?",[req.body.id],(error, results, fields)=>{
+      connection.query("DELETE FROM forum WHERE id=?", [req.body.id], function (error, results, fields) {
+        if (error) throw error;
+        if(results.affectedRows===1){
+          fs.unlink(req.body.videosupprime, (err) => {
+            if (err) throw err;
+            res.status(200).json({message: "video supprimer"});
+          });
+        }else{
+          res.status(400).json({message: "video non supprimer"});
+        };
+      });
     });
   };
 
@@ -249,9 +266,37 @@ exports.modifierMotdepasse = (req, res, next) => {
 
   exports.extractionForum = (req, res, next) => {
     let resultat="";
-    connection.query("SELECT * FROM forum", function (error, results, fields) {
+    connection.query("SELECT * FROM forum ORDER BY id DESC", function (error, results, fields) {
       if (error) throw error;
       resultat=results;
       res.json(resultat);
     });
   };
+
+  exports.extractionForumIndividuelle = (req, res, next) => {
+    let resultat="";
+    connection.query("SELECT * FROM forum WHERE id = ?",[req.body.id], function (error, results, fields) {
+      if (error) throw error;
+      resultat=results;
+      res.json(resultat);
+    });
+  };
+
+  exports.insertionCommentaire = (req, res, next) => {
+    connection.query("SELECT nom FROM inscription WHERE id = ?",[req.body.utilisateur], function (error, results, fields) {
+      connection.query("INSERT INTO commentaires (nom, idproduit, date, commentaire, utilisateur) VALUES (?,?,?,?,?)",[results[0].nom, req.body.idproduit, req.body.date, req.body.commentaire, req.body.utilisateur]
+      );
+    });
+    connection.query("UPDATE inscription SET derniereparticipation=? WHERE id=?",[req.body.date, req.body.utilisateur]
+      );
+    res.status(200).json({message: "tout est ok"});
+  };
+
+  exports.extractionCommentaire = (req, res, next) => {
+    let resultat="";
+    connection.query("SELECT * FROM commentaires WHERE idproduit = ?",[req.body.id], function (error, results, fields) {
+      if (error) throw error;
+      resultat=results;
+      res.json(resultat);
+    });
+  }

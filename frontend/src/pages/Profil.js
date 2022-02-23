@@ -53,6 +53,26 @@ const Profil=()=>{
                 }}>Modifier Mot de passe</button>
             </form>
             {reponse}
+            <button className="supprimer" 
+            onClick={event=>{
+              event.preventDefault();
+              axios.post('http://localhost:3001/supprimercompte', {
+                  utilisateur: document.cookie.split(";")[0].split("=")[1],
+                },{
+                  headers: {
+                    'Authorization': "Bearer "+document.cookie.split(";")[1].split("=")[1]
+                  }
+                })
+                .then(function (response) {
+                  console.log(response);
+                  setReponse(<p style={{color: "green"}}>supprime avec succes</p>);
+                })
+                .catch(function (error) {
+                  console.log(error);
+                  setReponse(<p style={{color: "red"}}>suppression echoue</p>);
+                });
+               }}
+            >Supprimer le compte</button>
         </div>
     );
 };

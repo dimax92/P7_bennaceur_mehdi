@@ -1,0 +1,10 @@
+enlever le nom au login
+deplacer le bouton supprimer dans le profil
+creer une page pour ajouter article
+une page qui affiche tous les articles et les commentaires
+pour chaque articles et commentaires il faut le nom et la date
+il faut pouvoir ajouter un commentaire a l'article
+enlever derniere participation
+afficher les articles par ordre anti chronologique
+deconnexion
+presentation

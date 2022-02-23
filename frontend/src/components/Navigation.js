@@ -28,21 +28,22 @@ const Navigation=()=>{
               })
               .then((response) => setNavigation(
             <div className="nav">
-                <NavLink className="navigation" activeClassName="nav-active" exact to="/">
-                    Login
-                </NavLink>
                 <NavLink className="navigation" activeClassName="nav-active" exact to="/Forum">
                     Forum
-                </NavLink>
-                <NavLink className="navigation" activeClassName="nav-active" exact to="/Inscription">
-                    Inscription
                 </NavLink>
                 <NavLink className="navigation" activeClassName="nav-active" exact to="/Profil">
                     Profil
                 </NavLink>
-                <NavLink className="navigation" activeClassName="nav-active" exact to="/ChargeDeCommunication">
-                    Charge de communication
+                <NavLink className="navigation" activeClassName="nav-active" exact to="/MiseEnLigne">
+                    Mise en Ligne
                 </NavLink>
+                <button 
+                onClick={(e)=>{
+                    document.cookie="userId=0";
+                    document.cookie="token=a";
+                    document.location.href='http://localhost:3000/';
+                }}
+                >Deconnexion</button>
             </div>
               ))
              .catch((err) => setReponse("Non"));

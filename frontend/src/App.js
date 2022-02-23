@@ -6,6 +6,8 @@ import ChargeDeCommunication from "./pages/ChargeDeCommunication"
 import PageNonTrouve from "./pages/PageNonTrouve";
 import Profil from "./pages/Profil";
 import Forum from "./pages/Forum";
+import MiseEnLigne from "./pages/MiseEnLigne";
+import Article from "./pages/Article";
 const App=()=>{
     return(
         <BrowserRouter>
@@ -15,6 +17,8 @@ const App=()=>{
              <Route path="/Forum" exact component={Forum}/>
              <Route path="/Inscription" exact component={Inscription}/>
              <Route path="/ChargeDeCommunication" exact component={ChargeDeCommunication}/>
+             <Route path="/MiseEnLigne" exact component={MiseEnLigne}/>
+             <Route path="/Article" exact component={Article}/>
              <Route component={PageNonTrouve}/>
            </Switch>
         </BrowserRouter>

@@ -39,5 +39,8 @@ router.post("/suppressionvideocharge", authentificationcharge, apiCtrl.suppressi
 router.get("/authentification", authentification, apiCtrl.authentification);
 router.get("/authentificationcharge", authentificationcharge, apiCtrl.authentificationCharge);
 router.get("/extractionforum", apiCtrl.extractionForum);
+router.post("/extractionforumindividuelle", apiCtrl.extractionForumIndividuelle);
+router.post('/insertioncommentaire', authentification, apiCtrl.insertionCommentaire);
+router.post("/extractioncommentaire", apiCtrl.extractionCommentaire);
 
 module.exports = router;

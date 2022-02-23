@@ -15,17 +15,14 @@ const Login=()=>{
             <Header/>
             <Navigation/>
             <form className="formulaireInscription">
-                <input className="nom" type="text" required="required" placeholder="nom"></input>
                 <input className="email" type="email" required="required" placeholder="email"></input>
                 <input className="motdepasse" type="password" required="required" placeholder="mot de passe"></input>
                 <button 
                 onClick={event=>{
                     event.preventDefault();
-                    let valeurNom=document.querySelector(".nom");
                     let valeurEmail=document.querySelector(".email");
                     let valeurMotdepasse=document.querySelector(".motdepasse");
                     axios.post('http://localhost:3001/profil', {
-                        nom: valeurNom.value,
                         email: valeurEmail.value,
                         motdepasse: valeurMotdepasse.value,
                         date: new Date()
@@ -35,35 +32,16 @@ const Login=()=>{
                         setReponse(<p style={{color: "green"}}>authentifiee avec succes</p>);
                         document.cookie="userId="+response.data.userId;
                         document.cookie="token="+response.data.token;
-                        console.log("le token: "+document.cookie.split(";")[1].split("=")[1]);
+                        document.location.reload();
                       })
                       .catch(function (error) {
                         console.log(error);
                         setReponse(<p style={{color: "red"}}>authentification echoue</p>);
-                      })
-                     }}>Se connecter</button>
+                      });
+                     }
+                     }>Se connecter</button>
             </form>
             {reponse}
-            <button className="supprimer" 
-            onClick={event=>{
-              event.preventDefault();
-              axios.post('http://localhost:3001/supprimercompte', {
-                  utilisateur: document.cookie.split(";")[0].split("=")[1],
-                },{
-                  headers: {
-                    'Authorization': "Bearer "+document.cookie.split(";")[1].split("=")[1]
-                  }
-                })
-                .then(function (response) {
-                  console.log(response);
-                  setReponse(<p style={{color: "green"}}>supprime avec succes</p>);
-                })
-                .catch(function (error) {
-                  console.log(error);
-                  setReponse(<p style={{color: "red"}}>suppression echoue</p>);
-                });
-               }}
-            >Supprimer le compte</button>
             <div>
             {data.map((participation)=>(
               <div>
