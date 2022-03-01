@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axios from "axios";
 const Profil=()=>{
     const [reponse, setReponse]=useState();
@@ -30,21 +31,24 @@ const Profil=()=>{
             <Header/>
             <Navigation/>
             <form className="formulaireInscription">
-                <input className="nom" type="text" required="required" placeholder="nom"></input>
+              <label for="nom">Nom</label>
+                <input id="nom" className="nom" type="text" required="required" placeholder="nom"></input>
                 <button
                 onClick={event=>{
                     event.preventDefault();
                     let valeurNom=document.querySelector(".nom");
                     modifierProfil('http://localhost:3001/modifienom', valeurNom.value);
                 }}>Modifier Nom</button>
-                <input className="email" type="email" required="required" placeholder="email"></input>
+                <label for="email">Email</label>
+                <input id="email" className="email" type="email" required="required" placeholder="email"></input>
                 <button               
                 onClick={event=>{
                     event.preventDefault();
                     let valeurEmail=document.querySelector(".email");
                     modifierProfil('http://localhost:3001/modifieemail', valeurEmail.value);
                 }}>Modifier Email</button>
-                <input className="motdepasse" type="password" required="required" placeholder="mot de passe"></input>
+                <label for="motdepasse">Mot de passe</label>
+                <input id="motdepasse" className="motdepasse" type="password" required="required" placeholder="mot de passe"></input>
                 <button                
                 onClick={event=>{
                     event.preventDefault();
@@ -73,6 +77,7 @@ const Profil=()=>{
                 });
                }}
             >Supprimer le compte</button>
+            <Footer/>
         </div>
     );
 };

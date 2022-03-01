@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axios from "axios";
 const Login=()=>{
   const[data, setData]=useState([]);
@@ -15,8 +16,10 @@ const Login=()=>{
             <Header/>
             <Navigation/>
             <form className="formulaireInscription">
-                <input className="email" type="email" required="required" placeholder="email"></input>
-                <input className="motdepasse" type="password" required="required" placeholder="mot de passe"></input>
+              <label for="email">Email</label>
+                <input id="email" className="email" type="email" required="required" placeholder="email"></input>
+                <label for="motdepasse">Mot de passe</label>
+                <input id="motdepasse" className="motdepasse" type="password" required="required" placeholder="mot de passe"></input>
                 <button 
                 onClick={event=>{
                     event.preventDefault();
@@ -49,6 +52,7 @@ const Login=()=>{
               </div>
             ))}
             </div>
+            <Footer/>
         </div>
     );
 };

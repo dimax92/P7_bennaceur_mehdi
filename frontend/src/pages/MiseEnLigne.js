@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axios from "axios";
 
 //Formulaire video
@@ -73,7 +74,8 @@ const FormulaireTexte=()=>{
           <div className="texteLigne">
               <p>Mettre en ligne son texte</p>
               <form>
-                  <textarea></textarea>
+                  <label for="texte">Texte</label>
+                  <textarea id="texte"></textarea>
                   <button 
                   onClick={event=>{
                       event.preventDefault();
@@ -110,6 +112,7 @@ const MiseEnLigne=()=>{
             <Navigation/>
             <FormulaireVideo/>
             <FormulaireTexte/>
+            <Footer/>
         </div>
     );
 };

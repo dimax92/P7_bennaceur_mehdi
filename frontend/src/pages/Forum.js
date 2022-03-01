@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axios from "axios";
 
 const MapTexteVideos=()=>{
@@ -17,7 +18,7 @@ const MapTexteVideos=()=>{
                     return(
                         <div className="divVideo1">
                           <a href={"Article?id="+forum.id}>
-                          <img className="video" width="300px" height="300px" src={"./videos/"+forum.contenu}/>
+                          <img alt="image contenu" className="video" width="300px" height="300px" src={"./videos/"+forum.contenu}/>
                           </a>
                         <p>{forum.nom}</p>
                         <p>{forum.date.split("T")[0]+" a "+forum.date.split("T")[1].split(".")[0]}</p>
@@ -46,6 +47,7 @@ const Forum=()=>{
             <Header/>
             <Navigation/>
             <MapTexteVideos/>
+            <Footer/>
         </div>
     );
 };

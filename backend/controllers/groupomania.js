@@ -170,6 +170,17 @@ exports.modifierMotdepasse = (req, res, next) => {
     );
   };
 
+  exports.modificationTexte = (req, res, next)=>{
+    connection.query("UPDATE forum SET contenu=? WHERE id=?", [req.body.textemodifie, req.body.id], function (error, results, fields) {
+      if (error) throw error;
+      if(results.affectedRows===1){
+        res.status(200).json({message: "texte modifier"});
+      }else{
+        res.status(400).json({message: "texte non modifier"});
+      };
+    });
+  };
+
   exports.insertionVideo = (req, res, next) => {
     connection.query("SELECT nom FROM inscription WHERE id = ?",[req.query.utilisateur], function (error, results, fields) {
       connection.query("INSERT INTO forum (utilisateur, contenu, type, date, nom) VALUES (?, ?, ?, ?, ?)",[req.query.utilisateur, req.file.filename, "image", req.query.date, results[0].nom]);
@@ -235,6 +246,17 @@ exports.modifierMotdepasse = (req, res, next) => {
       });
     }
     );
+  };
+
+  exports.modificationTexteCharge = (req, res, next)=>{
+    connection.query("UPDATE forum SET contenu=? WHERE id=?", [req.body.textemodifie, req.body.id], function (error, results, fields) {
+      if (error) throw error;
+      if(results.affectedRows===1){
+        res.status(200).json({message: "texte modifier"});
+      }else{
+        res.status(400).json({message: "texte non modifier"});
+      };
+    });
   };
 
   exports.suppressionVideoCharge = (req, res, next)=>{

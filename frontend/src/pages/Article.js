@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axios from "axios";
 
 const RecuperationArticle=()=>{
@@ -32,7 +33,7 @@ const RecuperationArticle=()=>{
                   parseInt(document.cookie.split(";")[0].split("=")[1]) === 1){
                         return(
                             <div className="divVideo1">
-                              <img className="video" width="300px" height="300px" src={"./videos/"+forum.contenu}/>
+                              <img alt="image contenu" className="video" width="300px" height="300px" src={"./videos/"+forum.contenu}/>
                             <p>{forum.nom}</p>
                             <p>{forum.date.split("T")[0]+" a "+forum.date.split("T")[1].split(".")[0]}</p>
                             <button
@@ -88,7 +89,7 @@ const RecuperationArticle=()=>{
                     }else{
                         return(
                             <div className="divVideo1">
-                              <img className="video" width="300px" height="300px" src={"./videos/"+forum.contenu}/>
+                              <img alt="image contenu" className="video" width="300px" height="300px" src={"./videos/"+forum.contenu}/>
                             <p>{forum.nom}</p>
                             <p>{forum.date.split("T")[0]+" a "+forum.date.split("T")[1].split(".")[0]}</p>
                         </div>
@@ -100,9 +101,51 @@ const RecuperationArticle=()=>{
                     parseInt(document.cookie.split(";")[0].split("=")[1]) === 1){
                         return(
                             <div>
-                              <p className="resultatTexte">{forum.contenu}</p>
+                              <label for="texte">Texte</label>
+                              <input id="texte" className="resultatTexte" type="text" defaultValue={forum.contenu}/>
                             <p>{forum.nom}</p>
                             <p>{forum.date.split("T")[0]+" a "+forum.date.split("T")[1].split(".")[0]}</p>
+                            <button className="buttonModifier"
+                              onClick={(e)=>{
+                                let searchParams = new URLSearchParams(window.location.search);
+                                let idProduit;
+                                for (let p of searchParams) {
+                                    idProduit=searchParams.get("id");
+                                };
+                                let modifietexte=document.querySelector(".resultatTexte").value;
+                                axios.post("http://localhost:3001/modificationtexte", {
+                                  textemodifie: modifietexte,
+                                  utilisateur: document.cookie.split(";")[0].split("=")[1],
+                                  id: idProduit
+                                },{
+                                  headers: {
+                                    'Authorization': "Bearer "+document.cookie.split(";")[1].split("=")[1]
+                                  }
+                                })
+                                .then((result) => {
+                                  setReponse(<p style={{color: "green"}}>Modifier</p>);
+                                })
+                               .catch((err) => {
+                                setReponse(<p style={{color: "red"}}>Modification echoue</p>);
+                              });
+                              if(parseInt(document.cookie.split(";")[0].split("=")[1]) === 1){
+                                axios.post("http://localhost:3001/modificationtextecharge", {
+                                  textemodifie: modifietexte,
+                                  id: idProduit
+                                },{
+                                  headers: {
+                                    'Authorization': "Bearer "+document.cookie.split(";")[1].split("=")[1]
+                                  }
+                                })
+                                .then((result) => {
+                                  setReponse(<p style={{color: "green"}}>Modifier</p>);
+                                })
+                               .catch((err) => {
+                                setReponse(<p style={{color: "red"}}>Modification echoue</p>);
+                              });
+                              }
+                            }}
+                              >Modifier</button>
                               <button className="buttonSupprimer"
                               onClick={(e)=>{
                                 let searchParams = new URLSearchParams(window.location.search);
@@ -179,7 +222,8 @@ const CreationCommentaire=()=>{
                     <div className="texteLigne">
                         <p>Mettre en ligne son commentaire</p>
                         <form>
-                            <textarea></textarea>
+                          <label for="texte">Commentaire</label>
+                            <textarea id="texte"></textarea>
                             <button 
                             onClick={event=>{
                                 event.preventDefault();
@@ -270,6 +314,7 @@ const Article=()=>{
             <RecuperationArticle/>
             <CreationCommentaire/>
             <MapCommentaires/>
+            <Footer/>
         </div>
     );
 };

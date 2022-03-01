@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axios from "axios";
 
 const ChargeDeCommunication=()=>{
@@ -10,7 +11,8 @@ const ChargeDeCommunication=()=>{
             <Header/>
             <Navigation/>
             <form className="formCharge">
-               <input className="inputCharge" type="password"></input>
+              <label>Mot de passe</label>
+               <input id="motdepasse" className="inputCharge" type="password"></input>
                <button
                onClick={event=>{
                 event.preventDefault();
@@ -34,6 +36,7 @@ const ChargeDeCommunication=()=>{
                >Se connecter</button>
             </form>
             {reponse}
+            <Footer/>
         </div>
     )
 };
