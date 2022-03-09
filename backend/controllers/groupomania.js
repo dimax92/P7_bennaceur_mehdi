@@ -5,11 +5,15 @@ const fs = require('fs');
 const mysql = require('mysql');
 const emailValidator = require("email-validator");
 const passwordValidator = require('password-validator');
+const dotEnv = require('dotenv').config();
 
+const dbHost = process.env.DB_HOST;
+const dbPassword = process.env.DB_PASSWORD;
+const dbUser = process.env.DB_USER;
 const connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
+    host     : dbHost,
+    user     : dbUser,
+    password : dbPassword,
     database : 'groupomania'
   });
 connection.connect();
