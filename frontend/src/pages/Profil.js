@@ -70,6 +70,9 @@ const Profil=()=>{
                 .then(function (response) {
                   console.log(response);
                   setReponse(<p style={{color: "green"}}>supprime avec succes</p>);
+                  document.cookie="userId=0";
+                  document.cookie="token=a";
+                  document.location.href='http://localhost:3000/';
                 })
                 .catch(function (error) {
                   console.log(error);

@@ -6,7 +6,6 @@ import axios from "axios";
 
 const RecuperationArticle=()=>{
     const[data, setData]=useState([]);
-    const[supprimer, setSupprimer]=useState();
     const[reponse, setReponse]=useState();
 
     useEffect(()=>{

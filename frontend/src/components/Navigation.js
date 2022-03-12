@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 const Navigation=()=>{
     const[reponse, setReponse]=useState([]);
-    const[cook, setCook]=useState([])
     const[navigation, setNavigation]= useState(
         <div className="nav">
             <NavLink className="navigation" activeClassName="nav-active" exact to="/">
