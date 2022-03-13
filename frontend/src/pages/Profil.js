@@ -24,7 +24,60 @@ const Profil=()=>{
             console.log(error);
             setReponse(<p style={{color:"red"}}>Echec modification</p>)
           }) 
-    }
+    };
+
+    function modifierNom(){
+      return <button
+      onClick={event=>{
+          event.preventDefault();
+          let valeurNom=document.querySelector(".nom");
+          modifierProfil('http://localhost:3001/modifienom', valeurNom.value);
+      }}>Modifier Nom</button>
+    };
+
+    function modifierEmail(){
+      return <button               
+      onClick={event=>{
+          event.preventDefault();
+          let valeurEmail=document.querySelector(".email");
+          modifierProfil('http://localhost:3001/modifieemail', valeurEmail.value);
+      }}>Modifier Email</button>
+    };
+
+    function modifierMotdepasse(){
+      return <button                
+      onClick={event=>{
+          event.preventDefault();
+          let valeurMotdepasse=document.querySelector(".motdepasse");
+          modifierProfil('http://localhost:3001/modifiemotdepasse', valeurMotdepasse.value);
+      }}>Modifier Mot de passe</button>
+    };
+
+    function boutonSupprimerProfil(){
+      return <button className="supprimer" 
+      onClick={event=>{
+        event.preventDefault();
+        axios.post('http://localhost:3001/supprimercompte', {
+            utilisateur: document.cookie.split(";")[0].split("=")[1],
+          },{
+            headers: {
+              'Authorization': "Bearer "+document.cookie.split(";")[1].split("=")[1]
+            }
+          })
+          .then(function (response) {
+            console.log(response);
+            setReponse(<p style={{color: "green"}}>supprime avec succes</p>);
+            document.cookie="userId=0";
+            document.cookie="token=a";
+            document.location.href='http://localhost:3000/';
+          })
+          .catch(function (error) {
+            console.log(error);
+            setReponse(<p style={{color: "red"}}>suppression echoue</p>);
+          });
+         }}
+      >Supprimer le compte</button>
+    };
 
     return(
         <div className="structure inscription">
@@ -33,53 +86,16 @@ const Profil=()=>{
             <form className="formulaireInscription">
               <label for="nom">Nom</label>
                 <input id="nom" className="nom" type="text" required="required" placeholder="nom"></input>
-                <button
-                onClick={event=>{
-                    event.preventDefault();
-                    let valeurNom=document.querySelector(".nom");
-                    modifierProfil('http://localhost:3001/modifienom', valeurNom.value);
-                }}>Modifier Nom</button>
+                {modifierNom()}
                 <label for="email">Email</label>
                 <input id="email" className="email" type="email" required="required" placeholder="email"></input>
-                <button               
-                onClick={event=>{
-                    event.preventDefault();
-                    let valeurEmail=document.querySelector(".email");
-                    modifierProfil('http://localhost:3001/modifieemail', valeurEmail.value);
-                }}>Modifier Email</button>
+                {modifierEmail()}
                 <label for="motdepasse">Mot de passe</label>
                 <input id="motdepasse" className="motdepasse" type="password" required="required" placeholder="mot de passe"></input>
-                <button                
-                onClick={event=>{
-                    event.preventDefault();
-                    let valeurMotdepasse=document.querySelector(".motdepasse");
-                    modifierProfil('http://localhost:3001/modifiemotdepasse', valeurMotdepasse.value);
-                }}>Modifier Mot de passe</button>
+                {modifierMotdepasse()}
             </form>
             {reponse}
-            <button className="supprimer" 
-            onClick={event=>{
-              event.preventDefault();
-              axios.post('http://localhost:3001/supprimercompte', {
-                  utilisateur: document.cookie.split(";")[0].split("=")[1],
-                },{
-                  headers: {
-                    'Authorization': "Bearer "+document.cookie.split(";")[1].split("=")[1]
-                  }
-                })
-                .then(function (response) {
-                  console.log(response);
-                  setReponse(<p style={{color: "green"}}>supprime avec succes</p>);
-                  document.cookie="userId=0";
-                  document.cookie="token=a";
-                  document.location.href='http://localhost:3000/';
-                })
-                .catch(function (error) {
-                  console.log(error);
-                  setReponse(<p style={{color: "red"}}>suppression echoue</p>);
-                });
-               }}
-            >Supprimer le compte</button>
+            {boutonSupprimerProfil()}
             <Footer/>
         </div>
     );

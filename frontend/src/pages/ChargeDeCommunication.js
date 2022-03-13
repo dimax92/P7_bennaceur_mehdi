@@ -26,6 +26,7 @@ const ChargeDeCommunication=()=>{
                     setReponse(<p style={{color: "green"}}>authentifiee avec succes</p>);
                     document.cookie="userId="+response.data.userId;
                     document.cookie="token="+response.data.token;
+                    document.location.reload();
                     console.log("le super token: "+document.cookie.split(";")[1].split("=")[1]);
                   })
                   .catch(function (error) {
